@@ -29,8 +29,8 @@ export default class HashMap {
         const bucket = this.buckets[index];
         if (!bucket) {
             const newBucket = new LinkedList();
-            this.entries++;
             newBucket.append(key, value);
+            this.entries++;
             this.buckets[index] = newBucket;
             return;
         }
@@ -100,4 +100,53 @@ export default class HashMap {
         }
     }
 
+    length() {
+        return this.entries;
+    }
+
+    clear() {
+        this.buckets = new Array(16);
+    }
+
+    keys() {
+        const keys = [];
+        for (const bucket of this.buckets) {
+            if (bucket) {
+                const temp = bucket.head;
+                while (temp !== null) {
+                    keys.push(temp.key);
+                    temp = temp.next;
+                }
+            }
+        }
+        return keys;
+    }
+
+    values() {
+        const values = [];
+        for (const bucket of this.buckets) {
+            if (bucket) {
+                const temp = bucket.head;
+                while (temp !== null) {
+                    values.push(temp.key);
+                    temp = temp.next;
+                }
+            }
+        }
+        return values;
+    }
+
+    entries() {
+        const entries = [];
+        for (const bucket of this.buckets) {
+            if (bucket) {
+                const temp = bucket.head;
+                while (temp !== null) {
+                    entries.push([temp.key, temp.value]);
+                    temp = temp.next;
+                }
+            }
+        }
+        return entries;
+    }
 }
