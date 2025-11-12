@@ -87,6 +87,8 @@ export default class HashMap {
 
         const bucket = this.buckets[index];
 
+        if (!bucket) return false;
+
         const nodeIndex = bucket.find(key);
 
         if (nodeIndex === null) {
@@ -153,12 +155,21 @@ export default class HashMap {
 
     addEntry(bucket, key, value) {
         if (this.currentSize >= this.capacity * this.loadFactor) {
-            this.capacity *= 2;
+            this.resizeMap();
             this.set(key, value);
         }
         else {
             bucket.append(key, value);
             this.currentSize++;
+        }
+    }
+
+    resizeMap() {
+        this.capacity *= 2;
+        const entries = this.entries();
+        this.clear();
+        for (const e of entries) {
+            this.set(e[0], e[1]);
         }
     }
 }
