@@ -7,23 +7,23 @@ export default class LinkedList {
 		this.tail = null;
 	}
 
-	append(value) {
+	append(key, value) {
 		if (this.tail === null) {
-			this.tail = new Node(value);
+			this.tail = new Node(key, value);
 			this.head = this.tail;
 		} else {
-			this.tail.next = new Node(value, null, this.tail);
+			this.tail.next = new Node(key, value, null, this.tail);
 			this.tail = this.tail.next;
 		}
 		this.size++;
 	}
 
-	prepend(value) {
+	prepend(key, value) {
 		if (this.head === null) {
-			this.head = new Node(value);
+			this.head = new Node(key, value);
 			this.tail = this.head;
 		} else {
-			this.head = new Node(value, this.head);
+			this.head = new Node(key, value, this.head);
 			const next = this.head.next;
 			next.prev = this.head;
 		}
@@ -66,11 +66,11 @@ export default class LinkedList {
 		return temp;
 	}
 
-	contains(value) {
+	contains(key) {
 		let temp = this.head;
 
 		while (temp !== null) {
-			if (temp.value === value) {
+			if (temp.key === key) {
 				return true;
 			}
 			temp = temp.next;
@@ -78,16 +78,14 @@ export default class LinkedList {
 		return false;
 	}
 
-	find(value) {
-		let i = 0;
+	find(key) {
 
 		let temp = this.head;
 		while (temp !== null) {
-			if (temp.value === value) {
-				return i;
+			if (temp.key === key) {
+				return temp.value;
 			}
 			temp = temp.next;
-			i++;
 		}
 
 		return null;
@@ -106,13 +104,13 @@ export default class LinkedList {
 		return listStr;
 	}
 
-	insertAt(value, index) {
+	insertAt(key, value, index) {
 		if (index === 0) {
-			this.prepend(value);
+			this.prepend(key, value);
 			return;
 		}
 		if (index === this.size) {
-			this.append(value);
+			this.append(key, value);
 			return;
 		}
 		if (index < 0 || index > this.size) {
@@ -120,7 +118,7 @@ export default class LinkedList {
 		}
 		const curr = this.at(index);
 		const prev = curr.prev;
-		const newNode = new Node(value, curr, prev);
+		const newNode = new Node(key, value, curr, prev);
 		prev.next = newNode;
 		curr.prev = newNode;
 		this.size++;
