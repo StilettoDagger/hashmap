@@ -4,7 +4,7 @@ export default class HashMap {
     constructor(capacity = 16, loadFactor = 0.77) {
         this.capacity = capacity;
         this.loadFactor = loadFactor;
-        this.buckets = new Array(capacity);
+        this.buckets = [];
         this.entries = 0;
     }
 
@@ -22,7 +22,7 @@ export default class HashMap {
     set(key, value) {
         let index = this.hash(key) % this.capacity;
 
-        if (index < 0 || index >= this.buckets.length) {
+        if (index < 0 || index >= this.capacity) {
             throw new Error("Trying to access index out of bounds.");
         }
 
@@ -48,7 +48,7 @@ export default class HashMap {
     get(key) {
         const index = this.hash(key) % this.capacity;
     
-        if (index < 0 || index >= this.buckets.length) {
+        if (index < 0 || index >= this.capacity) {
             throw new Error("Trying to access index out of bounds.");
         }
 
@@ -66,7 +66,7 @@ export default class HashMap {
     has(key) {
         const index = this.hash(key) % this.capacity;
 
-        if (index < 0 || index >= this.buckets.length) {
+        if (index < 0 || index >= this.capacity) {
             throw new Error("Trying to access index out of bounds.");
         }
 
@@ -82,7 +82,7 @@ export default class HashMap {
     remove(key) {
         const index = this.hash(key) % this.capacity;
 
-        if (index < 0 || index >= this.buckets.length) {
+        if (index < 0 || index >= this.capacity) {
             throw new Error("Trying to access index out of bounds.");
         }
 
@@ -104,7 +104,7 @@ export default class HashMap {
     }
 
     clear() {
-        this.buckets = new Array(16);
+        this.buckets = [];
         this.entries = 0;
     }
 
@@ -153,5 +153,8 @@ export default class HashMap {
     addEntry(bucket, key, value) {
         bucket.append(key, value);
         this.entries++;
+        if (this.entries >= this.capacity * this.loadFactor) {
+            this.capacity *= 2;
+        }
     }
 }
