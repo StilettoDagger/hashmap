@@ -29,8 +29,7 @@ export default class HashMap {
         const bucket = this.buckets[index];
         if (!bucket) {
             const newBucket = new LinkedList();
-            newBucket.append(key, value);
-            this.entries++;
+            this.addEntry(newBucket)
             this.buckets[index] = newBucket;
             return;
         }
@@ -38,8 +37,7 @@ export default class HashMap {
         const nodeIndex = bucket.find(key);
 
         if (nodeIndex === null) {
-            bucket.append(key, value);
-            this.entries++;
+            this.addEntry(bucket, key, value);
         }
         else {
             bucket.at(nodeIndex).value = value;
@@ -97,6 +95,7 @@ export default class HashMap {
         }
         else {
             bucket.remove(nodeIndex);
+            this.entries--;
         }
     }
 
@@ -106,6 +105,7 @@ export default class HashMap {
 
     clear() {
         this.buckets = new Array(16);
+        this.entries = 0;
     }
 
     keys() {
@@ -148,5 +148,10 @@ export default class HashMap {
             }
         }
         return entries;
+    }
+
+    addEntry(bucket, key, value) {
+        bucket.append(key, value);
+        this.entries++;
     }
 }
