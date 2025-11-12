@@ -5,7 +5,7 @@ export default class HashMap {
         this.capacity = capacity;
         this.loadFactor = loadFactor;
         this.buckets = [];
-        this.entries = 0;
+        this.currentSize = 0;
     }
 
     hash(key) {
@@ -94,18 +94,19 @@ export default class HashMap {
             throw new Error(`Key ${key} can not be found.`);
         }
         else {
-            bucket.remove(nodeIndex);
-            this.entries--;
+            bucket.removeAt(nodeIndex);
+            if (bucket.size === 0) this.buckets[index] = null;
+            this.currentSize--;
         }
     }
 
     length() {
-        return this.entries;
+        return this.currentSize;
     }
 
     clear() {
         this.buckets = [];
-        this.entries = 0;
+        this.currentSize = 0;
     }
 
     keys() {
@@ -126,9 +127,9 @@ export default class HashMap {
         const values = [];
         for (const bucket of this.buckets) {
             if (bucket) {
-                const temp = bucket.head;
+                let temp = bucket.head;
                 while (temp !== null) {
-                    values.push(temp.key);
+                    values.push(temp.value);
                     temp = temp.next;
                 }
             }
@@ -140,7 +141,7 @@ export default class HashMap {
         const entries = [];
         for (const bucket of this.buckets) {
             if (bucket) {
-                const temp = bucket.head;
+                let temp = bucket.head;
                 while (temp !== null) {
                     entries.push([temp.key, temp.value]);
                     temp = temp.next;
@@ -151,10 +152,10 @@ export default class HashMap {
     }
 
     addEntry(bucket, key, value) {
-        bucket.append(key, value);
-        this.entries++;
-        if (this.entries >= this.capacity * this.loadFactor) {
+        if (this.currentSize >= this.capacity * this.loadFactor) {
             this.capacity *= 2;
         }
+        bucket.append(key, value);
+        this.currentSize++;
     }
 }
