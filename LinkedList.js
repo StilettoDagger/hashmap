@@ -79,13 +79,14 @@ export default class LinkedList {
 	}
 
 	find(key) {
-
+		let i = 0;
 		let temp = this.head;
 		while (temp !== null) {
 			if (temp.key === key) {
-				return temp;
+				return i;
 			}
 			temp = temp.next;
+			i++;
 		}
 
 		return null;
@@ -129,7 +130,6 @@ export default class LinkedList {
 			throw RangeError("Invalid index.");
 		}
 		if (index === this.size - 1) {
-			console.log("popping")
 			return this.pop();
 		}
 

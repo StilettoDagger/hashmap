@@ -35,14 +35,14 @@ export default class HashMap {
             return;
         }
 
-        const node = bucket.find(key);
+        const nodeIndex = bucket.find(key);
 
-        if (node) {
-            node.value = value;
-        }
-        else {
+        if (nodeIndex === null) {
             bucket.append(key, value);
             this.entries++;
+        }
+        else {
+            bucket.at(nodeIndex).value = value;
         }
 
     }
@@ -60,7 +60,9 @@ export default class HashMap {
             return null;
         }
 
-        return bucket.find(key) ? bucket.find(key).value : null;
+        const nodeIndex = bucket.find(key);
+
+        return nodeIndex === null ? bucket.at(nodeIndex).value : null;
     }
 
     has(key) {
@@ -77,6 +79,25 @@ export default class HashMap {
         }
 
         return bucket.contains(key);
+    }
+
+    remove(key) {
+        const index = this.hash(key) % this.capacity;
+
+        if (index < 0 || index >= this.buckets.length) {
+            throw new Error("Trying to access index out of bounds.");
+        }
+
+        const bucket = this.buckets[index];
+
+        const nodeIndex = bucket.find(key);
+
+        if (nodeIndex === null) {
+            throw new Error(`Key ${key} can not be found.`);
+        }
+        else {
+            bucket.remove(nodeIndex);
+        }
     }
 
 }
