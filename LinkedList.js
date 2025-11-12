@@ -1,10 +1,13 @@
 import Node from "./Node.js";
 
 export default class LinkedList {
-	constructor() {
+	constructor(key = null, value = null) {
 		this.size = 0;
 		this.head = null;
 		this.tail = null;
+		if (key !== null && value !== null) {
+			this.append(key, value);
+		}
 	}
 
 	append(key, value) {

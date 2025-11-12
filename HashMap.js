@@ -28,9 +28,8 @@ export default class HashMap {
 
         const bucket = this.buckets[index];
         if (!bucket) {
-            const newBucket = new LinkedList();
-            this.addEntry(newBucket, key, value)
-            this.buckets[index] = newBucket;
+            this.buckets[index] = new LinkedList(key, value);
+            this.currentSize++;
             return;
         }
 
@@ -91,12 +90,13 @@ export default class HashMap {
         const nodeIndex = bucket.find(key);
 
         if (nodeIndex === null) {
-            throw new Error(`Key ${key} can not be found.`);
+            return false;
         }
         else {
             bucket.removeAt(nodeIndex);
             if (bucket.size === 0) this.buckets[index] = null;
             this.currentSize--;
+            return true;
         }
     }
 
@@ -154,8 +154,11 @@ export default class HashMap {
     addEntry(bucket, key, value) {
         if (this.currentSize >= this.capacity * this.loadFactor) {
             this.capacity *= 2;
+            this.set(key, value);
         }
-        bucket.append(key, value);
-        this.currentSize++;
+        else {
+            bucket.append(key, value);
+            this.currentSize++;
+        }
     }
 }
