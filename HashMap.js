@@ -47,4 +47,20 @@ export default class HashMap {
 
     }
 
+    get(key) {
+        const index = this.hash(key) % this.capacity;
+    
+        if (index < 0 || index >= this.buckets.length) {
+            throw new Error("Trying to access index out of bounds.");
+        }
+
+        const bucket = this.buckets[index];
+
+        if (!bucket) {
+            return null;
+        }
+
+        return bucket.find(key) ? bucket.find(key).value : null;
+    }
+
 }
