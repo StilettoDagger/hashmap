@@ -5,7 +5,7 @@ export default class LinkedList {
 		this.size = 0;
 		this.head = null;
 		this.tail = null;
-		if (key !== null && value !== null) {
+		if (key !== null || value !== null) {
 			this.append(key, value);
 		}
 	}
